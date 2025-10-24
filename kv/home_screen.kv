@@ -1,0 +1,211 @@
+#:import dp kivy.metrics.dp
+#:import MDDialog kivymd.uix.dialog.MDDialog
+#:import MDFlatButton kivymd.uix.button.MDFlatButton
+#:import MDBoxLayout kivymd.uix.boxlayout.MDBoxLayout
+#:import TwoLineListItem kivymd.uix.list.TwoLineListItem
+<HomeScreen>:
+    name: "home_screen"
+
+    MDBoxLayout:
+        orientation: "vertical"
+        padding: 0
+        spacing: 0
+
+        # Хедер с фиолетовым
+        MDBoxLayout:
+            orientation: "vertical"
+            size_hint_y: None
+            height: dp(120)
+            padding: dp(25)
+            spacing: dp(8)
+            md_bg_color: 0.5, 0.3, 0.7, 1
+            elevation: 6
+
+            MDLabel:
+                text: "Главная"
+                halign: "center"
+                font_style: "H4"
+                theme_text_color: "Custom"
+                text_color: 1, 1, 1, 1
+                bold: True
+                size_hint_y: None
+                height: self.texture_size[1]
+
+            MDLabel:
+                text: "Обзор ваших задач и расписания"
+                halign: "center"
+                font_style: "Subtitle1"
+                theme_text_color: "Custom"
+                text_color: 1, 1, 1, 0.9
+                size_hint_y: None
+                height: self.texture_size[1]
+
+        # Основной контент
+        ScrollView:
+            do_scroll_x: False
+            do_scroll_y: True
+
+            MDBoxLayout:
+                orientation: "vertical"
+                padding: dp(20)
+                spacing: dp(25)
+                adaptive_height: True
+
+                # Секция: Календарь
+                MDCard:
+                    orientation: "vertical"
+                    padding: dp(20)
+                    spacing: dp(15)
+                    size_hint_y: None
+                    height: dp(400)
+                    elevation: 4
+
+                    MDLabel:
+                        text: "Календарь"
+                        font_style: "H5"
+                        size_hint_y: None
+                        height: self.texture_size[1]
+                        bold: True
+                        theme_text_color: "Custom"
+                        text_color: 0.4, 0.2, 0.6, 1
+
+                    # Заголовок календаря с кнопками навигации
+                    MDBoxLayout:
+                        orientation: "horizontal"
+                        size_hint_y: None
+                        height: dp(50)
+                        spacing: dp(10)
+
+                        MDFlatButton:
+                            text: "<"
+                            on_release: root.prev_month()
+                            size_hint_x: None
+                            width: dp(50)
+                            theme_text_color: "Custom"
+                            text_color: 0.5, 0.3, 0.7, 1
+                            font_style: "H5"
+
+                        MDLabel:
+                            text: f"{root.current_month}/{root.current_year}"
+                            halign: "center"
+                            font_style: "H6"
+                            size_hint_x: 1
+                            theme_text_color: "Custom"
+                            text_color: 0.4, 0.2, 0.6, 1
+                            bold: True
+
+                        MDFlatButton:
+                            text: ">"
+                            on_release: root.next_month()
+                            size_hint_x: None
+                            width: dp(50)
+                            theme_text_color: "Custom"
+                            text_color: 0.5, 0.3, 0.7, 1
+                            font_style: "H5"
+
+                    # Сетка календаря
+                    MDGridLayout:
+                        id: calendar_grid
+                        cols: 7
+                        rows: 7
+                        spacing: dp(3)
+                        adaptive_height: True
+                        size_hint_y: None
+                        height: dp(280)
+
+                # Секция: Ближайший экзамен - ДИНАМИЧЕСКАЯ (появляется только когда есть экзамены)
+                MDCard:
+                    id: exam_card_section
+                    orientation: "vertical"
+                    padding: dp(20)
+                    spacing: dp(15)
+                    size_hint_y: None
+                    height: 0 if not root.next_exam else dp(180)  # Динамическая высота
+                    elevation: 3
+                    opacity: 1 if root.next_exam else 0  # Полная прозрачность когда нет экзаменов
+
+                    MDLabel:
+                        text: "Ближайший экзамен"
+                        font_style: "H5"
+                        size_hint_y: None
+                        height: self.texture_size[1]
+                        bold: True
+                        theme_text_color: "Custom"
+                        text_color: 0.4, 0.2, 0.6, 1
+
+                    MDBoxLayout:
+                        id: exam_container
+                        orientation: "vertical"
+                        adaptive_height: True
+                        spacing: dp(10)
+
+                # Секция: Сегодня
+                MDCard:
+                    orientation: "vertical"
+                    padding: dp(20)
+                    spacing: dp(15)
+                    size_hint_y: None
+                    height: dp(200)
+                    elevation: 3
+
+                    MDLabel:
+                        text: "Актуальные задачи"
+                        font_style: "H5"
+                        size_hint_y: None
+                        height: self.texture_size[1]
+                        bold: True
+                        theme_text_color: "Custom"
+                        text_color: 0.4, 0.2, 0.6, 1
+
+                    ScrollView:
+                        size_hint_y: None
+                        height: dp(120)
+                        do_scroll_x: False
+
+                        MDList:
+                            id: today_container
+                            spacing: dp(5)
+
+                # Секция: Ближайшие дедлайны
+                MDCard:
+                    orientation: "vertical"
+                    padding: dp(20)
+                    spacing: dp(15)
+                    size_hint_y: None
+                    height: dp(200)
+                    elevation: 3
+
+                    MDLabel:
+                        text: "Ближайшие дедлайны (3 дня)"
+                        font_style: "H5"
+                        size_hint_y: None
+                        height: self.texture_size[1]
+                        bold: True
+                        theme_text_color: "Custom"
+                        text_color: 0.4, 0.2, 0.6, 1
+
+                    ScrollView:
+                        size_hint_y: None
+                        height: dp(120)
+                        do_scroll_x: False
+
+                        MDList:
+                            id: deadlines_container
+                            spacing: dp(5)
+
+                # Кнопка обновления
+                MDRaisedButton:
+                    text: "Обновить данные"
+                    pos_hint: {"center_x": 0.5}
+                    on_release: root.refresh_data()
+                    size_hint_x: 0.6
+                    md_bg_color: 0.5, 0.3, 0.7, 1
+                    theme_text_color: "Custom"
+                    text_color: 1, 1, 1, 1
+                    size_hint_y: None
+                    height: dp(50)
+
+                # Отступ внизу
+                Widget:
+                    size_hint_y: None
+                    height: dp(10)

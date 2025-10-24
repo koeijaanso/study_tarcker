@@ -1,0 +1,153 @@
+<DebtsScreen>:
+    name: "debts_screen"
+    has_debts: False
+
+    MDBoxLayout:
+        orientation: "vertical"
+        padding: 0
+        spacing: 0
+
+        # Хедер с фиолетовым
+        MDBoxLayout:
+            orientation: "vertical"
+            size_hint_y: None
+            height: dp(120)
+            padding: dp(25)
+            spacing: dp(8)
+            md_bg_color: 0.5, 0.3, 0.7, 1
+            elevation: 6
+
+            MDLabel:
+                text: "Задолженности"
+                halign: "center"
+                font_style: "H4"
+                theme_text_color: "Custom"
+                text_color: 1, 1, 1, 1
+                bold: True
+                size_hint_y: None
+                height: self.texture_size[1]
+
+            MDLabel:
+                text: "Управление академическими долгами"
+                halign: "center"
+                font_style: "Subtitle1"
+                theme_text_color: "Custom"
+                text_color: 1, 1, 1, 0.9
+                size_hint_y: None
+                height: self.texture_size[1]
+
+        # Основной контент
+        ScrollView:
+            do_scroll_x: False
+            do_scroll_y: True
+
+            MDBoxLayout:
+                orientation: "vertical"
+                padding: dp(20)
+                spacing: dp(20)
+                adaptive_height: True
+
+                # Карточка формы добавления
+                MDCard:
+                    orientation: "vertical"
+                    padding: dp(60)
+                    spacing: dp(10)
+                    size_hint_y: None
+                    height: dp(380)
+                    elevation: 4
+
+                    MDLabel:
+                        text: "Добавить задолженность"
+                        font_style: "H5"
+                        size_hint_y: None
+                        height: self.texture_size[1]
+                        bold: True
+                        theme_text_color: "Custom"
+                        text_color: 0.4, 0.2, 0.6, 1
+
+                    MDTextField:
+                        id: input_task
+                        hint_text: "Название задолженности"
+                        mode: "rectangle"
+                        size_hint_y: None
+                        height: dp(60)
+                        line_color_focus: 0.5, 0.3, 0.7, 1
+
+                    MDTextField:
+                        id: input_type
+                        hint_text: "Тип работы (контрольная, проект и т.д.)"
+                        mode: "rectangle"
+                        size_hint_y: None
+                        height: dp(60)
+                        line_color_focus: 0.5, 0.3, 0.7, 1
+
+                    MDBoxLayout:
+                        orientation: "vertical"
+                        size_hint_y: None
+                        height: dp(60)
+                        spacing: dp(5)
+
+                        MDLabel:
+                            text: "Предмет:"
+                            theme_text_color: "Secondary"
+                            size_hint_y: None
+                            height: dp(20)
+                            font_style: "Caption"
+
+                        MDFillRoundFlatButton:
+                            id: subject_dropdown_btn
+                            text: "Выберите предмет"
+                            size_hint_y: None
+                            height: dp(40)
+                            on_release: root.open_subject_dropdown()
+                            md_bg_color: 0.9, 0.9, 0.9, 1
+                            theme_text_color: "Custom"
+                            text_color: 0.2, 0.2, 0.2, 1
+
+                    MDBoxLayout:
+                        orientation: "horizontal"
+                        spacing: dp(15)
+                        size_hint_y: None
+                        height: dp(50)
+
+                        MDRaisedButton:
+                            id: add_button
+                            text: "Добавить задолженность"
+                            size_hint_x: 0.7
+                            on_release: root.add_debt()
+                            md_bg_color: 0.5, 0.3, 0.7, 1
+                            theme_text_color: "Custom"
+                            text_color: 1, 1, 1, 1
+
+                        MDFlatButton:
+                            text: "Очистить"
+                            size_hint_x: 0.3
+                            theme_text_color: "Custom"
+                            text_color: 0.5, 0.3, 0.7, 1
+                            on_release: root.cancel_edit()
+
+                # Заголовок списка
+                MDBoxLayout:
+                    orientation: "horizontal"
+                    size_hint_y: None
+                    height: dp(50)
+                    padding: dp(10)
+
+                    MDLabel:
+                        text: "Активные задолженности"
+                        font_style: "H5"
+                        theme_text_color: "Custom"
+                        text_color: 0.4, 0.2, 0.6, 1
+                        bold: True
+                        size_hint_y: None
+                        height: self.texture_size[1]
+
+                    Widget:
+                        size_hint_x: 1
+
+                # Контейнер для списка
+                MDBoxLayout:
+                    id: list_container
+                    orientation: "vertical"
+                    adaptive_height: True
+                    spacing: dp(15)

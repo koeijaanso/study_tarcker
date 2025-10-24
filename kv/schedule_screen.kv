@@ -1,0 +1,56 @@
+<ScheduleScreen>:
+    name: "schedule_screen"
+
+    MDBoxLayout:
+        orientation: "vertical"
+        padding: 0
+        spacing: 0
+
+        # Хедер с фиолетовым
+        MDBoxLayout:
+            orientation: "vertical"
+            size_hint_y: None
+            height: dp(120)
+            padding: dp(25)
+            spacing: dp(8)
+            md_bg_color: 0.5, 0.3, 0.7, 1
+            elevation: 6
+
+            MDLabel:
+                text: "Расписание"
+                halign: "center"
+                font_style: "H4"
+                theme_text_color: "Custom"
+                text_color: 1, 1, 1, 1
+                bold: True
+                size_hint_y: None
+                height: self.texture_size[1]
+
+            MDLabel:
+                text: "Планирование учебного расписания"
+                halign: "center"
+                font_style: "Subtitle1"
+                theme_text_color: "Custom"
+                text_color: 1, 1, 1, 0.9
+                size_hint_y: None
+                height: self.texture_size[1]
+
+        # Основной контент
+        ScrollView:
+            do_scroll_x: False
+            do_scroll_y: True
+            bar_width: dp(8)
+            scroll_type: ['bars', 'content']
+
+            MDGridLayout:
+                id: schedule_container
+                cols: 1  # Одна колонка для дней недели
+                adaptive_height: True
+                padding: dp(20)
+                spacing: dp(15)
+                size_hint_y: None
+                height: self.minimum_height  # Важно!
+
+
+
+

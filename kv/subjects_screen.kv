@@ -1,0 +1,150 @@
+<SubjectsScreen>:
+    name: "subjects_screen"
+    has_subjects: False
+
+    MDBoxLayout:
+        orientation: "vertical"
+        padding: 0
+        spacing: 0
+
+        # Хедер с фиолетовым
+        MDBoxLayout:
+            orientation: "vertical"
+            size_hint_y: None
+            height: dp(120)
+            padding: dp(25)
+            spacing: dp(8)
+            md_bg_color: 0.5, 0.3, 0.7, 1
+            elevation: 6
+
+            MDLabel:
+                text: "Предметы"
+                halign: "center"
+                font_style: "H4"
+                theme_text_color: "Custom"
+                text_color: 1, 1, 1, 1
+                bold: True
+                size_hint_y: None
+                height: self.texture_size[1]
+
+            MDLabel:
+                text: "Управление учебными предметами"
+                halign: "center"
+                font_style: "Subtitle1"
+                theme_text_color: "Custom"
+                text_color: 1, 1, 1, 0.9
+                size_hint_y: None
+                height: self.texture_size[1]
+
+        # Основной контент
+        ScrollView:
+            do_scroll_x: False
+            do_scroll_y: True
+
+            MDBoxLayout:
+                orientation: "vertical"
+                padding: dp(20)
+                spacing: dp(20)
+                adaptive_height: True
+
+                # Карточка формы добавления
+                MDCard:
+                    orientation: "vertical"
+                    padding: dp(30)
+                    spacing: dp(10)
+                    size_hint_y: None
+                    height: dp(320)  # Уменьшена высота, так как убрали выбор цвета
+                    elevation: 4
+
+                    MDLabel:
+                        text: "Добавить предмет"
+                        font_style: "H5"
+                        size_hint_y: None
+                        height: self.texture_size[1]
+                        bold: True
+                        theme_text_color: "Custom"
+                        text_color: 0.4, 0.2, 0.6, 1
+
+                    MDTextField:
+                        id: input_subject
+                        hint_text: "Название предмета"
+                        mode: "rectangle"
+                        size_hint_y: None
+                        height: dp(60)
+                        line_color_focus: 0.5, 0.3, 0.7, 1
+
+                    MDTextField:
+                        id: input_teacher
+                        hint_text: "Преподаватель (необязательно)"
+                        mode: "rectangle"
+                        size_hint_y: None
+                        height: dp(60)
+                        line_color_focus: 0.5, 0.3, 0.7, 1
+
+                    MDTextField:
+                        id: input_room
+                        hint_text: "Аудитория (необязательно)"
+                        mode: "rectangle"
+                        size_hint_y: None
+                        height: dp(60)
+                        line_color_focus: 0.5, 0.3, 0.7, 1
+
+                    # Кнопка добавления
+                    MDRaisedButton:
+                        id: add_button
+                        text: "Добавить предмет"
+                        pos_hint: {"center_x": 0.5}
+                        on_release: root.add_subject()
+                        size_hint_x: 0.8
+                        md_bg_color: 0.5, 0.3, 0.7, 1
+                        theme_text_color: "Custom"
+                        text_color: 1, 1, 1, 1
+                        size_hint_y: None
+                        height: dp(50)
+
+                # Заголовок списка
+                MDBoxLayout:
+                    orientation: "horizontal"
+                    size_hint_y: None
+                    height: dp(50)
+                    padding: dp(10)
+
+                    MDLabel:
+                        text: "Список предметов"
+                        font_style: "H5"
+                        theme_text_color: "Custom"
+                        text_color: 0.4, 0.2, 0.6, 1
+                        bold: True
+                        size_hint_y: None
+                        height: self.texture_size[1]
+
+                    Widget:
+                        size_hint_x: 1
+
+                # Контейнер для списка
+                MDBoxLayout:
+                    id: list_container
+                    orientation: "vertical"
+                    adaptive_height: True
+                    spacing: dp(15)
+
+                    # Сообщение о пустом состоянии будет добавляться динамически через Python
+
+<SubjectItem@MDBoxLayout>:
+    orientation: "horizontal"
+    size_hint_y: None
+    height: dp(60)
+    spacing: dp(15)
+    padding: dp(15)
+    md_bg_color: 0.95, 0.92, 1, 1
+    radius: dp(12)
+
+    MDLabel:
+        id: subject_label
+        text: ""
+        halign: "left"
+        valign: "center"
+        size_hint_x: 1
+        theme_text_color: "Custom"
+        text_color: 0.4, 0.2, 0.6, 1
+        font_style: "H6"
