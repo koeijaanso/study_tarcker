@@ -25,10 +25,19 @@ jobs:
         
     - name: Build APK
       run: |
-        # Принимаем Android SDK лицензии
+        # Ждем пока SDK скачается и найдем правильный путь к sdkmanager
+        sleep 30
+        # Находим правильный путь к sdkmanager
+        SDKMANAGER_PATH=$(find /home/runner/.buildozer -name "sdkmanager" -type f | head -1)
+        echo "Found sdkmanager at: $SDKMANAGER_PATH"
+        
+        # Принимаем лицензии
         mkdir -p ~/.android
         echo "### User Sources for Android SDK Manager" > ~/.android/repositories.cfg
-        yes | /home/runner/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager --licenses || true
+        if [ -n "$SDKMANAGER_PATH" ]; then
+          yes | $SDKMANAGER_PATH --licenses || true
+        fi
+        
         buildozer -v android debug
         
     - name: Upload APK
