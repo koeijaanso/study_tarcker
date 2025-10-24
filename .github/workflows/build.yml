@@ -23,21 +23,40 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y git zip unzip openjdk-17-jdk autoconf libtool pkg-config zlib1g-dev libncurses-dev cmake libffi-dev libssl-dev
         
+    - name: Pre-configure Android licenses
+      run: |
+        mkdir -p ~/.android
+        touch ~/.android/repositories.cfg
+        # Предварительно создаем файлы лицензий
+        echo "8933bad161af4178b1185d1a37fbf41ea5269c55" > ~/.android/android-sdk-license
+        echo "84831b9409646a918e30573bab4c9c91346d8abd" >> ~/.android/android-sdk-license
+        
     - name: Build APK
       run: |
-        # Ждем пока SDK скачается и найдем правильный путь к sdkmanager
-        sleep 30
-        # Находим правильный путь к sdkmanager
-        SDKMANAGER_PATH=$(find /home/runner/.buildozer -name "sdkmanager" -type f | head -1)
-        echo "Found sdkmanager at: $SDKMANAGER_PATH"
+        # Даем время на скачивание SDK
+        echo "Ожидаем загрузку Android SDK..."
+        sleep 45
         
-        # Принимаем лицензии
-        mkdir -p ~/.android
-        echo "### User Sources for Android SDK Manager" > ~/.android/repositories.cfg
-        if [ -n "$SDKMANAGER_PATH" ]; then
-          yes | $SDKMANAGER_PATH --licenses || true
+        # Ищем sdkmanager в нескольких возможных местах
+        SDKMANAGER_PATH=$(find /home/runner/.buildozer -name "sdkmanager" -type f 2>/dev/null | head -1)
+        
+        if [ -z "$SDKMANAGER_PATH" ]; then
+          echo "sdkmanager не найден, пробуем альтернативные пути..."
+          # Пробуем другие возможные пути
+          SDKMANAGER_PATH=$(find /usr/local/lib -name "sdkmanager" -type f 2>/dev/null | head -1)
         fi
         
+        echo "Found sdkmanager at: $SDKMANAGER_PATH"
+        
+        # Принимаем лицензии если нашли sdkmanager
+        if [ -n "$SDKMANAGER_PATH" ] && [ -x "$SDKMANAGER_PATH" ]; then
+          echo "Принимаем лицензии Android SDK..."
+          yes | $SDKMANAGER_PATH --licenses || echo "Лицензии уже приняты или ошибка"
+        else
+          echo "sdkmanager не найден или недоступен, продолжаем сборку..."
+        fi
+        
+        # Запускаем сборку
         buildozer -v android debug
         
     - name: Upload APK
