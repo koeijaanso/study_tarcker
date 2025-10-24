@@ -23,14 +23,12 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y git zip unzip openjdk-17-jdk autoconf libtool pkg-config zlib1g-dev libncurses-dev cmake libffi-dev libssl-dev
         
-    - name: Accept Android licenses
+    - name: Build APK
       run: |
+        # Принимаем Android SDK лицензии
         mkdir -p ~/.android
         echo "### User Sources for Android SDK Manager" > ~/.android/repositories.cfg
         yes | /home/runner/.buildozer/android/platform/android-sdk/tools/bin/sdkmanager --licenses || true
-        
-    - name: Build APK
-      run: |
         buildozer -v android debug
         
     - name: Upload APK
